@@ -24,6 +24,8 @@ class Settings(BaseSettings):
 
     retrieval_top_k: int = 8
     similarity_threshold: float = 0.35
+    coverage_threshold: float = 0.2
+    min_keyword_count: int = 1
 
     city_config_dir: str = "./cities"
 

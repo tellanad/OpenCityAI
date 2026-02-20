@@ -1,5 +1,6 @@
 from backend.app.config import get_settings
 from backend.app.rag.generate import generate_answer
+from backend.app.rag.guardrails import should_refuse
 from backend.app.rag.retrieve import retrieve_chunks
 
 settings = get_settings()
@@ -8,21 +9,9 @@ settings = get_settings()
 def run_rag(city_id: str, query: str, session_id: str | None = None) -> dict:
     chunks = retrieve_chunks(city_id=city_id, query=query)
 
-    if not chunks:
-        return {
-            "answer": "I don't know based on current city documents.",
-            "citations": [],
-            "meta": {
-                "city_id": city_id,
-                "retrieved_k": 0,
-                "refused": True,
-                "reason": "no_retrieval_hits",
-                "session_id": session_id,
-            },
-        }
+    refused, reason, guard_meta = should_refuse(query, chunks)
 
-    top_score = chunks[0]["score"]
-    if top_score < settings.similarity_threshold:
+    if refused:
         return {
             "answer": "I don't know based on current city documents.",
             "citations": [],
@@ -30,9 +19,9 @@ def run_rag(city_id: str, query: str, session_id: str | None = None) -> dict:
                 "city_id": city_id,
                 "retrieved_k": len(chunks),
                 "refused": True,
-                "reason": "low_confidence",
-                "top_score": top_score,
+                "reason": reason,
                 "session_id": session_id,
+                **guard_meta,
             },
         }
 

@@ -8,6 +8,7 @@ import httpx
 from backend.app.analytics.store import record_query_event
 from backend.app.config import get_settings
 from backend.app.rag.generate import build_prompt, fallback_extractive
+from backend.app.rag.guardrails import should_refuse
 from backend.app.rag.retrieve import retrieve_chunks
 
 settings = get_settings()
@@ -52,49 +53,19 @@ async def stream_answer(
     chunks = retrieve_chunks(city_id=city_id, query=query)
     citations = _build_citations(chunks)
 
-    if not chunks:
-        meta = {
-            "city_id": city_id,
-            "retrieved_k": 0,
-            "refused": True,
-            "reason": "no_retrieval_hits",
-            "model": settings.ollama_model,
-            "session_id": session_id,
-            "query_id": query_id,
-            "citations": citations,
-        }
-        yield _format_sse("meta", meta)
-        yield _format_sse(
-            "token", {"token": "I don't know based on current city documents."}
-        )
-        latency_ms = int((time.perf_counter() - started) * 1000)
-        _safe_record(
-            city_id=city_id,
-            query_id=query_id,
-            query_text=query,
-            session_id=session_id,
-            latency_ms=latency_ms,
-            refused=True,
-            refusal_reason="no_retrieval_hits",
-            retrieved_k=0,
-            citations_count=len(citations),
-            model=settings.ollama_model,
-        )
-        yield _format_sse("done", {"latency_ms": latency_ms, "refused": True})
-        return
+    refused, reason, guard_meta = should_refuse(query, chunks)
 
-    top_score = chunks[0]["score"]
-    if top_score < settings.similarity_threshold:
+    if refused:
         meta = {
             "city_id": city_id,
             "retrieved_k": len(chunks),
             "refused": True,
-            "reason": "low_confidence",
-            "top_score": top_score,
+            "reason": reason,
             "model": settings.ollama_model,
             "session_id": session_id,
             "query_id": query_id,
             "citations": citations,
+            **guard_meta,
         }
         yield _format_sse("meta", meta)
         yield _format_sse(
@@ -108,7 +79,7 @@ async def stream_answer(
             session_id=session_id,
             latency_ms=latency_ms,
             refused=True,
-            refusal_reason="low_confidence",
+            refusal_reason=reason,
             retrieved_k=len(chunks),
             citations_count=len(citations),
             model=settings.ollama_model,

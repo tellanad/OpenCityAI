@@ -77,6 +77,13 @@ curl -N http://localhost:8000/v1/query/stream \
   -d '{"city_id":"san_francisco","query":"How do I report a broken streetlight?"}'
 ```
 
+## Response Quality Notes
+
+If the answer is generic or unsupported by the sources, the API will refuse with:
+`I don't know based on current city documents.`
+
+This is intentional to avoid hallucinations when a city has limited indexed data.
+
 ## Example Feedback
 
 ```bash
