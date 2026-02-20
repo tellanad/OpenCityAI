@@ -43,6 +43,7 @@ def _needs_fallback(answer: str) -> bool:
         "sources:",
         "statement",
         "question:",
+        "questions:",
         "you are a municipal information assistant",
         "skips to main content",
     ]

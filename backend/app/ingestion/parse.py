@@ -42,5 +42,15 @@ def extract_text(uri: str, raw: bytes, content_type: str) -> tuple[str, str]:
         title = uri.rsplit("/", 1)[-1] or "Untitled"
         text = raw.decode("utf-8", errors="ignore")
 
+    # Remove common navigation boilerplate that still leaks into main content.
+    noise = [
+        r"\bSkip to main content\b",
+        r"\bSF\.gov Menu\b",
+        r"\bSF\.gov\b",
+        r"\bMenu\b",
+    ]
+    for pattern in noise:
+        text = re.sub(pattern, " ", text, flags=re.IGNORECASE)
+
     text = re.sub(r"\s+", " ", text).strip()
     return title, text
