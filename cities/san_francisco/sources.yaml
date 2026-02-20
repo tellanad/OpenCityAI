@@ -1,0 +1,5 @@
+sources:
+  - type: url
+    uri: https://www.sf.gov/
+  - type: url
+    uri: https://www.sf.gov/services

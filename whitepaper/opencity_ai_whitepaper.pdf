@@ -1,0 +1,192 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 2 /Kids [5 0 R 7 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 2135 >>
+stream
+BT
+/F1 10 Tf
+50 760 Td
+(# OpenCity AI Whitepaper) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(## OpenCity AI: A Lightweight, Open-Source Municipal Knowledge Retrieval Platform) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### Abstract) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(OpenCity AI is an open-source, multi-tenant platform that helps municipalities and civic) Tj
+0 -14 Td
+(technology communities improve access to public information using Retrieval-Augmented) Tj
+0 -14 Td
+(Generation \(RAG\). It is designed to complement existing city systems by providing a) Tj
+0 -14 Td
+(document-grounded retrieval and answer layer with source citations and predictable operating) Tj
+0 -14 Td
+(cost.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### 1. Problem) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Cities publish service procedures, policy pages, and regulations across many systems. Citizens) Tj
+0 -14 Td
+(and staff often face information-access friction because the data is distributed, unevenly) Tj
+0 -14 Td
+(indexed, and updated over time.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### 2. Proposed System) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(```mermaid) Tj
+0 -14 Td
+(flowchart LR) Tj
+0 -14 Td
+(  A[Citizen or Staff Query] --> B[FastAPI Gateway]) Tj
+0 -14 Td
+(  B --> C[Retriever]) Tj
+0 -14 Td
+(  C --> D[Qdrant city_id filter]) Tj
+0 -14 Td
+(  D --> E[Context Chunks]) Tj
+0 -14 Td
+(  E --> F[Open-Source LLM]) Tj
+0 -14 Td
+(  F --> G[Answer with Citations]) Tj
+0 -14 Td
+(```) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### 3. Multi-Tenant Design) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(```mermaid) Tj
+0 -14 Td
+(flowchart TD) Tj
+0 -14 Td
+(  A[City A] --> S[Shared API]) Tj
+0 -14 Td
+(  B[City B] --> S) Tj
+0 -14 Td
+(  C[City C] --> S) Tj
+0 -14 Td
+(  S --> V[Shared Qdrant]) Tj
+0 -14 Td
+(  V --> F1[city_id=city_a]) Tj
+0 -14 Td
+(  V --> F2[city_id=city_b]) Tj
+0 -14 Td
+(  V --> F3[city_id=city_c]) Tj
+0 -14 Td
+(```) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Each query is filtered by `city_id`, so retrieval stays scoped to the correct city corpus.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### 4. Knowledge Updates) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(1. Fetch document sources.) Tj
+0 -14 Td
+(2. Compute content hash.) Tj
+0 -14 Td
+(3. If changed: parse, chunk, embed, and upsert vectors.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 1148 >>
+stream
+BT
+/F1 10 Tf
+50 760 Td
+(4. Queries immediately use latest indexed version.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### 5. Cost Model \(Pilot\)) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(| Component | Typical Spec | Monthly Cost \(USD\) |) Tj
+0 -14 Td
+(|---|---|---:|) Tj
+0 -14 Td
+(| App + retrieval server | 4-8 vCPU, 8-16GB RAM | 40-100 |) Tj
+0 -14 Td
+(| Storage volumes | Postgres + Qdrant | 5-20 |) Tj
+0 -14 Td
+(| LLM inference | Open-source local runtime | Included in infra |) Tj
+0 -14 Td
+(| Total \(pilot range\) | Single-node deployment | 45-120 |) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### 6. Limitations) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(- Assistive retrieval system, not autonomous city decision-making.) Tj
+0 -14 Td
+(- Accuracy depends on source quality and update discipline.) Tj
+0 -14 Td
+(- Human verification is still required for high-stakes actions.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(### 7. Conclusion) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(OpenCity AI provides practical civic value when positioned as knowledge infrastructure:) Tj
+0 -14 Td
+(transparent retrieval, source-cited responses, and low-cost deployment that can integrate with) Tj
+0 -14 Td
+(existing municipal systems.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000002383 00000 n 
+0000002509 00000 n 
+0000003708 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+3834
+%%EOF
